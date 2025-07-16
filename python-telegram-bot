@@ -1,0 +1,32 @@
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+
+# تابع شروع ربات
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('سلام! من ربات شما هستم. چطور می‌توانم کمک کنم؟')
+
+# تابع برای دریافت پیام‌های متنی
+def echo(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text(update.message.text)
+
+def main():
+    # 7835116613:AAEuZ5mwjpNrozXR75Jjjy4wNhEiwJcprDA
+    updater = Updater("YOUR_BOT_TOKEN")
+
+    # دریافت دیسپچر برای ثبت هندلرها
+    dispatcher = updater.dispatcher
+
+    # ثبت دستور /start
+    dispatcher.add_handler(CommandHandler("start", start))
+
+    # ثبت هندلر برای پیام‌های متنی
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    # شروع ربات
+    updater.start_polling()
+
+    # منتظر بمانید تا ربات متوقف شود
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
